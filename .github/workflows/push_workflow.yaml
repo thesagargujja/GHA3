@@ -1,72 +1,86 @@
-name: github_artifacte demo
+name: github_artifact_demo
 
-on: 
-  push: 
+on:
+  push:
     branches:
       - main
       - dev
+
   pull_request:
-    - main
-    - release-*
+    branches:
+      - main
+      - release-*
+
   workflow_dispatch:
+
   schedule:
     - cron: '0 9 * * *'
 
 env:
-  NODE_Version: 24
+  NODE_VERSION: '24'
 
 jobs:
+
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Get Code
-        uses: actions/checkout@v7
-      - name: Install Node 
+        uses: actions/checkout@v4
+
+      - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_Version }}
+          node-version: ${{ env.NODE_VERSION }}
+
       - name: Install Dependencies
         run: npm ci
+
       - name: Lint Code
-        run : npm run lint
+        run: npm run lint
+
       - name: Test Code
         run: npm run test
+
 
   build:
     runs-on: ubuntu-latest
     needs: test
+
     steps:
       - name: Get Code
-        uses: actions/checkout@v7
-      - name: Install Node 
         uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_Version }}
+          node-version: ${{ env.NODE_VERSION }}
+
       - name: Install Dependencies
         run: npm ci
-      - name: Build task
-        run : npm run build
-      - name: Upload Build github_artifacte
-        uses: actions/upload-artifact@v7
+
+      - name: Build Task
+        run: npm run build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
         with:
           name: dist-file
           path: dist
+
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
       - name: Get Build Artifacts
-        uses: actions\download-artifact@v8
+        uses: actions/download-artifact@v4
         with:
-          name: dist file
+          name: dist-file
+
       - name: List Files
-        run: ls 
-      - name: deploy
+        run: ls -la
+
+      - name: Deploy
         run: echo "deploying....!"
-    
-
-
-
-
-
-
