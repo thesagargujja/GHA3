@@ -17,7 +17,7 @@ on:
     - cron: '0 9 * * *'
 
 env:
-  NODE_VERSION: '24'
+  NODE_VERSION: '20'
 
 jobs:
 
