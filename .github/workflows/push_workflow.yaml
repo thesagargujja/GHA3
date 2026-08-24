@@ -8,7 +8,7 @@ on:
 
   pull_request:
     branches:
-      - main
+      - main 
       - release-*
 
   workflow_dispatch:
